@@ -1,72 +1,48 @@
 import allure
-from allure_commons.types import Severity
-
-from swagLabs_ui_tests.utils.helpers import successful_login
-from swagLabs_ui_tests.application import app
-from swagLabs_ui_tests.data import products
-from swagLabs_ui_tests.utils.allure_marks import feature, owner
-
-pytestmark = [
-    feature('Cart'),
-    owner('KrN')
-]
+import pytest
+from selene import browser, have
+from pages.main_page import MainPage
+from pages.cart_page import CartPage
 
 
-@allure.title('The added product can be removed from the cart')
-@allure.tag('web')
-@allure.story('The cart is empty after deleting the added product from it')
-@allure.severity(Severity.NORMAL)
-def test_product_can_be_removed_from_cart():
-    successful_login()
-    app.inventory_page.add_product_to_cart(products.backpack)
-    app.inventory_page.open_cart()
 
-    app.cart.remove_product(products.backpack)
+main = MainPage()
+cart = CartPage()
 
-    app.cart.verify_is_empty()
+@allure.suite("Cart")
+class TestCart:
 
+    @allure.title("Add Item to Cart")
+    def test_add_item_to_cart(self, authorized_user):
+        with allure.step("Perform Login"):
+            main = authorized_user
+        with allure.step("Add item to cart"):
+            main.add_item_to_cart('add-to-cart-sauce-labs-backpack')
+        with allure.step("Verify cart"):
+            cart.open_cart()
+            browser.element('.title').should(have.text('Your Cart'))
+            cart.should_contain_item('Sauce Labs Backpack')
+        with allure.step("Verify item count in cart"):
+            cart.should_have_items_count(1)
 
-@allure.title('The user can proceed to checkout from the cart')
-@allure.tag('web')
-@allure.story('The user gets redirected to the checkout page after clicking "Checkout"')
-@allure.severity(Severity.NORMAL)
-def test_user_can_proceed_to_checkout_from_cart():
-    successful_login()
-    app.inventory_page.add_product_to_cart(products.backpack)
-    app.inventory_page.open_cart()
-    app.cart.go_to_checkout()
-
-    app.checkout_page.verify_is_opened()
-
-    app.cart.clear_cart(1)
-
-
-@allure.title('The user can continue shopping from the cart')
-@allure.tag('web')
-@allure.story('The user gets redirected to the inventory page after clicking "Continue shopping"')
-@allure.severity(Severity.NORMAL)
-def test_user_can_continue_shopping_from_cart():
-    successful_login()
-    app.inventory_page.add_product_to_cart(products.backpack)
-    app.inventory_page.open_cart()
-    app.cart.continue_shopping()
-
-    app.inventory_page.verify_is_opened()
-
-    app.cart.clear_cart(1)
+    @allure.title("Remove Item from Cart")
+    def test_remove_item_from_cart(self, authorized_user):
+        with allure.step("Perform Login"):
+            main = authorized_user
+        with allure.step("Add item to cart"):
+            main.add_item_to_cart('add-to-cart-sauce-labs-backpack')
+        with allure.step("Remove item from cart"):
+            main.remove_item_from_cart('remove-sauce-labs-backpack')
+        with allure.step("Verify cart is empty"):
+            cart.open_cart()
+            cart.should_have_items_count(0)
 
 
-@allure.title('The cart stays persistent when switching between pages')
-@allure.tag('web')
-@allure.story('The added product stays in cart after switching to another page and back')
-@allure.severity(Severity.CRITICAL)
-def test_cart_persistence():
-    successful_login()
-    app.inventory_page.add_product_to_cart(products.backpack)
-    app.inventory_page.open_cart()
-    app.common.select_product(products.backpack)
-    app.product_page.go_to_cart()
 
-    app.common.product_details_match_selected_product(products.backpack)
 
-    app.cart.clear_cart(1)
+
+
+
+
+
+
