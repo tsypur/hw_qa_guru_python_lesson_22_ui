@@ -13,29 +13,29 @@ class TestLogin:
 
     @allure.title("Successful Login")
     def test_successful_login(self, browser_setup):
-        with allure.step("Open login page"):
+        with allure.step("Откройте страницу входа"):
             login.open()
-        with allure.step("Enter valid credentials"):
+        with allure.step("Введите действительные учетные данные"):
             login.login('standard_user', 'secret_sauce')
-        with allure.step("Verify user is logged in"):
+        with allure.step("Убедитесь, что пользователь вошел в систему"):
             main.should_be_loaded()
 
     @allure.title("Failed Login")
     def test_failed_login(self, browser_setup):
-        with allure.step("Open login page"):
+        with allure.step("Откройте страницу входа"):
             login.open()
-        with allure.step("Enter invalid credentials"):
+        with allure.step("Введите неверные учетные данные"):
             login.login('invalid_user', 'invalid_password')
-        with allure.step("Verify error message is shown"):
+        with allure.step("Убедитесь, что отображается сообщение об ошибке"):
             login.should_have_error('Epic sadface: Username and password do not match any user in this service')
 
     @allure.title("Logout")
     def test_logout(self, authorized_user):
-        with allure.step("User is already logged in"):
+        with allure.step("Пользователь уже авторизован"):
             main = authorized_user
-        with allure.step("Perform logout"):
+        with allure.step("Выполнить выход из системы"):
             main.logout()
-        with allure.step("Verify user is logged out"):
+        with allure.step("Убедитесь, что пользователь вышел из системы."):
             browser.element('#login-button').should(be.visible)
 
 
