@@ -9,10 +9,10 @@ from pages.cart_page import CartPage
 main = MainPage()
 cart = CartPage()
 
-@allure.suite("Cart")
+@allure.suite("Корзина")
 class TestCart:
 
-    @allure.title("Add Item to Cart")
+    @allure.title("Добавление товара в корзину")
     def test_add_item_to_cart(self, authorized_user):
         with allure.step("Выполните вход в систему"):
             main = authorized_user
@@ -25,7 +25,7 @@ class TestCart:
         with allure.step("Проверьте количество товара в корзине"):
             cart.should_have_items_count(1)
 
-    @allure.title("Remove Item from Cart")
+    @allure.title("Удаление товара из корзины")
     def test_remove_item_from_cart(self, authorized_user):
         with allure.step("Выполните вход в систему"):
             main = authorized_user

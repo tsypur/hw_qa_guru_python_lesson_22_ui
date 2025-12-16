@@ -3,10 +3,10 @@ import pytest
 from selene import browser, have
 from pages.main_page import MainPage
 
-@allure.suite("Navigation")
+@allure.suite("Навигация")
 class TestNavigation:
 
-    @allure.title("Menu")
+    @allure.title("Меню")
     def test_navigation(self, authorized_user):
         with allure.step("Выполните вход в систему"):
             main = authorized_user
@@ -15,7 +15,7 @@ class TestNavigation:
         with allure.step("Подтвердите, что страница «О нас» открыта"):
             browser.should(have.url_containing('saucelabs.com'))
 
-    @allure.title("Product Filtering")
+    @allure.title("Фильтрация товаров")
     def test_product_filtering(self, authorized_user):
         with allure.step("Выполните вход в систему"):
             main = authorized_user

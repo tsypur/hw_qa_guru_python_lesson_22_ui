@@ -8,10 +8,10 @@ from pages.main_page import MainPage
 login = LoginPage()
 main = MainPage()
 
-@allure.suite("Authentication")
+@allure.suite("Аутентификация")
 class TestLogin:
 
-    @allure.title("Successful Login")
+    @allure.title("Успешный вход в систему")
     def test_successful_login(self, browser_setup):
         with allure.step("Откройте страницу входа"):
             login.open()
@@ -20,7 +20,7 @@ class TestLogin:
         with allure.step("Убедитесь, что пользователь вошел в систему"):
             main.should_be_loaded()
 
-    @allure.title("Failed Login")
+    @allure.title("Неудачный вход в систему")
     def test_failed_login(self, browser_setup):
         with allure.step("Откройте страницу входа"):
             login.open()
@@ -29,7 +29,7 @@ class TestLogin:
         with allure.step("Убедитесь, что отображается сообщение об ошибке"):
             login.should_have_error('Epic sadface: Username and password do not match any user in this service')
 
-    @allure.title("Logout")
+    @allure.title("Выход")
     def test_logout(self, authorized_user):
         with allure.step("Пользователь уже авторизован"):
             main = authorized_user
